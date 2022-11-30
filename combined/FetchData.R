@@ -3,17 +3,17 @@ FetchData <- function() {
   
   #Still data
   #RawDataStill0123 <<- FetchSpreadsheet("1hOSkx6_UaHHGwcqdPi790D8hQsQkc8O5talezbtw89c")
-  RawDataStill0123 <- FetchSpreadsheet("1Z9OgK5fv3pnznIinrLXVYMYGvZC6SsjMPRiMVB9EQoM")
+  RawDataStill0123 <- FetchSpreadsheet2("Drone Q 0123 Still (Responses) - Form Responses 1.csv")
   # Exclude bad response
   RawDataStill0123 <- RawDataStill0123[c(-6),]
   RawDataStill0123$PID <- seq.int(nrow(RawDataStill0123))
   
-  RawDataStill1230 <- FetchSpreadsheet("1UJ7pCSInwcep0MsGr_uQ1mSRWxwuS3lmz3Z_DzSIl1E")
+  RawDataStill1230 <- FetchSpreadsheet2("Drone Q 1230 Still (Responses) - Form Responses 1.csv")
   startPID = max(RawDataStill0123$PID, na.rm=TRUE)+1
   endPID = startPID-1 + nrow(RawDataStill1230)
   RawDataStill1230$PID <- seq.int(from=startPID, to=endPID)
   
-  RawDataStill2301 <- FetchSpreadsheet("1NVtviarPv4IAlg5stqldK-XyfDWXMBk8zhXEA7B16Go")
+  RawDataStill2301 <- FetchSpreadsheet2("Drone Q 2301 Moving (Responses) - Form Responses 1.csv")
   ## Exclude bad response
   RawDataStill2301 <- RawDataStill2301[c(-10),]
   
@@ -21,14 +21,14 @@ FetchData <- function() {
   endPID = startPID-1 + nrow(RawDataStill2301)
   RawDataStill2301$PID <- seq.int(from=startPID, to=endPID)
 
-  RawDataStill3012 <- FetchSpreadsheet("1YZvn7OMpSlk3y7QfqBxx4qYaSEdyGh-T1EGkjz1587s")
+  RawDataStill3012 <- FetchSpreadsheet2("Drone Q 3012 Still (Responses) - Form Responses 1.csv")
   ## Exclude bad response
   RawDataStill3012 <- RawDataStill3012[c(-1),]
   startPID = max(RawDataStill2301$PID, na.rm=TRUE)+1
   endPID = startPID-1 + nrow(RawDataStill3012)
   RawDataStill3012$PID <- seq.int(from=startPID, to=endPID)
   
-  RawDataMov0123 <- FetchSpreadsheet("1x4w-FKqS88cIVlgwi1oj2Wrr9ReAreUDCJ9hrSbRprU")
+  RawDataMov0123 <- FetchSpreadsheet2("Drone Q 0123 Moving (Responses) - Form Responses 1.csv")
   ## Exclude bad response
   RawDataMov0123 <- RawDataMov0123[c(-13),]
   #RawDataMov0123 <- RawDataMov0123[sample(nrow(RawDataMov0123), 13),]
@@ -37,7 +37,7 @@ FetchData <- function() {
   endPID = startPID-1 + nrow(RawDataMov0123)
   RawDataMov0123$PID <- seq.int(from=startPID, to=endPID)
   
-  RawDataMov1230 <- FetchSpreadsheet("1O_tY9lBSBmOXYmXdYRXkOrAixTdfZjfV1y8FR4K5k6w")
+  RawDataMov1230 <- FetchSpreadsheet2("Drone Q 1230 Moving (Responses) - Form Responses 1.csv")
   ## Exclude bad response
   RawDataMov1230 <- RawDataMov1230[c(-4),]
 
@@ -45,13 +45,13 @@ FetchData <- function() {
   endPID = startPID-1 + nrow(RawDataMov1230)
   RawDataMov1230$PID <- seq.int(from=startPID, to=endPID)
 
-  RawDataMov2301 <- FetchSpreadsheet("1ndiRlhd0tclIYYDoUK6JCVeJHGaItZeNigjlFbPkKuE")
+  RawDataMov2301 <- FetchSpreadsheet2("Drone Q 2301 Moving (Responses) - Form Responses 1.csv")
   RawDataMov2301[13,2] = "Male"
   startPID = max(RawDataMov1230$PID, na.rm=TRUE)+1
   endPID = startPID-1 + nrow(RawDataMov2301)
   RawDataMov2301$PID <- seq.int(from=startPID, to=endPID)
   
-  RawDataMov3012 <- FetchSpreadsheet("1F9hvqYBMQwuTuAADv3xJmKeFRdURRMmSMeV60nLnyME")
+  RawDataMov3012 <- FetchSpreadsheet2("Drone Q 3012 Moving (Responses) - Form Responses 1.csv")
   ## Fix attack helicopter response
   RawDataMov3012[6,2] = "Male"
   ## Exclude bad response
@@ -88,6 +88,12 @@ FetchSpreadsheet <- function(id){
   require(RCurl)
   ssUrl <- paste("https://docs.google.com/spreadsheets/d/",id,"/export?format=csv", sep = "")
   return (read.csv(textConnection(getURL(ssUrl,.opts=list(ssl.verifypeer=FALSE)))))
+}
+
+FetchSpreadsheet2 <- function(id){
+  #require(RCurl)
+  fileName <- paste("combined/data/", id, sep = "")
+  return (read.csv(fileName))
 }
 
 CleanDataFrame <- function(dataFrame, cameraPan, motionOrder, motion1, motion2, motion3, motion4){

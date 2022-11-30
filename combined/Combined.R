@@ -65,7 +65,7 @@ library(reshape2)
 library(plyr)
 library(ggplot2)
 library(Hmisc)
-
+library(Rmisc)
 
 gg <- melt(CleanedData, id.vars=c("Motion"))
 gg <- subset(gg, variable == "Degree")
@@ -83,6 +83,13 @@ ggplot(gg2, aes(Motion, value, colour=Motion)) + theme_bw() +
   ylab("Degree of feeling acknowledged (%)") + xlab("") + theme(legend.position="none")
 dev.off()
 
+ggplot(gg2, aes(Motion, value)) + theme_bw() + 
+  geom_bar(fill="white", colour="black",stat="identity") +
+  geom_jitter(data = gg, aes(Motion, value), width=0.2, color="black", alpha=0.2, size=0.8) +
+  geom_errorbar(aes(ymin=value-ci, ymax=value+ci), width=.2, position = position_dodge(0.2), color="black") +
+  scale_x_discrete(limits=c("Rotation", "Waggle", "Toss", "Nod"), labels=c("Orienting", "Orienting +\nWaggle", "Orienting +\nToss", "Orienting +\nNod")) + 
+  scale_y_continuous(limits = c(-0,100)) + 
+  ylab("Degree of feeling acknowledged (%)") + xlab("") + theme(legend.position="none")
 
 
 below <- subset(gg, value <= 50)
